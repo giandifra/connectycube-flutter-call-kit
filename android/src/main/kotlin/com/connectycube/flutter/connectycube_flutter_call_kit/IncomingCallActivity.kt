@@ -122,6 +122,7 @@ class IncomingCallActivity : Activity() {
         val callTitleTxt: TextView =
             findViewById(resources.getIdentifier("user_name_txt", "id", packageName))
         callTitleTxt.text = callInitiatorName
+
         val callSubTitleTxt: TextView =
             findViewById(resources.getIdentifier("call_type_txt", "id", packageName))
         callSubTitleTxt.text =

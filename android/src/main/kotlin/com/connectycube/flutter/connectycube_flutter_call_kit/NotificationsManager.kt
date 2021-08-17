@@ -12,12 +12,13 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.connectycube.flutter.connectycube_flutter_call_kit.utils.getColorizedText
 
-const val CALL_CHANNEL_ID = "calls_channel_id"
-const val CALL_CHANNEL_NAME = "Calls"
+//const val CALL_CHANNEL_ID = "calls_channel_id"
+//const val CALL_CHANNEL_NAME = "Calls"
 
 
 fun cancelCallNotification(context: Context, callId: String) {
@@ -27,8 +28,9 @@ fun cancelCallNotification(context: Context, callId: String) {
 
 fun showCallNotification(
     context: Context, callId: String, callType: Int, callInitiatorId: Int,
-    callInitiatorName: String, callOpponents: ArrayList<Int>, userInfo: String
+    callInitiatorName: String, callOpponents: ArrayList<Int>, userInfo: String, channelId:String, channelName:String
 ) {
+    Log.i("GM edit", "showCallNotification");
     val notificationManager = NotificationManagerCompat.from(context)
 
     val intent = getLaunchIntent(context)
@@ -49,19 +51,19 @@ fun showCallNotification(
         String.format(CALL_TYPE_PLACEHOLDER, if (callType == 1) "Video" else "Audio")
 
     val builder: NotificationCompat.Builder =
-        createCallNotification(context, callInitiatorName, callTypeTitle, pendingIntent, ringtone)
+        createCallNotification(context, callInitiatorName, channelId, callTypeTitle, pendingIntent, ringtone)
 
     // Add actions
-    addCallRejectAction(
-        context,
-        builder,
-        callId,
-        callType,
-        callInitiatorId,
-        callInitiatorName,
-        callOpponents,
-        userInfo
-    )
+//    addCallRejectAction(
+//        context,
+//        builder,
+//        callId,
+//        callType,
+//        callInitiatorId,
+//        callInitiatorName,
+//        callOpponents,
+//        userInfo
+//    )
     addCallAcceptAction(
         context,
         builder,
@@ -102,7 +104,7 @@ fun showCallNotification(
     // Set notification color accent
     setNotificationColor(context, builder)
 
-    createCallNotificationChannel(notificationManager, ringtone)
+    createCallNotificationChannel(notificationManager, ringtone, channelId, channelName)
 
     notificationManager.notify(callId.hashCode(), builder.build())
 }
@@ -116,11 +118,12 @@ fun getLaunchIntent(context: Context): Intent? {
 fun createCallNotification(
     context: Context,
     title: String,
+    channelId: String,
     text: String?,
     pendingIntent: PendingIntent,
     ringtone: Uri
 ): NotificationCompat.Builder {
-    val notificationBuilder = NotificationCompat.Builder(context, CALL_CHANNEL_ID)
+    val notificationBuilder = NotificationCompat.Builder(context, channelId)
     notificationBuilder
         .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
         .setContentTitle(title)
@@ -204,7 +207,7 @@ fun addCallAcceptAction(
     )
     val acceptAction: NotificationCompat.Action = NotificationCompat.Action.Builder(
         context.resources.getIdentifier("ic_menu_call", "drawable", context.packageName),
-        getColorizedText("Accept", "#4CB050"),
+        getColorizedText("Visto", "#0047e0"),
         acceptPendingIntent
     )
         .build()
@@ -266,11 +269,10 @@ fun addCancelCallNotificationIntent(
     notificationBuilder.setDeleteIntent(deleteCallNotificationPendingIntent)
 }
 
-fun createCallNotificationChannel(notificationManager: NotificationManagerCompat, sound: Uri) {
+fun createCallNotificationChannel(notificationManager: NotificationManagerCompat, sound: Uri, channelId:String, channelName:String) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val channel = NotificationChannel(
-            CALL_CHANNEL_ID,
-            CALL_CHANNEL_NAME,
+        val channel = NotificationChannel(channelId,
+                channelName,
             NotificationManager.IMPORTANCE_HIGH
         )
         channel.setSound(
@@ -285,7 +287,7 @@ fun createCallNotificationChannel(notificationManager: NotificationManagerCompat
 
 fun setNotificationSmallIcon(context: Context, notificationBuilder: NotificationCompat.Builder) {
     val resID =
-        context.resources.getIdentifier("ic_launcher_foreground", "drawable", context.packageName)
+        context.resources.getIdentifier("chivado_notification", "drawable", context.packageName)
     if (resID != 0) {
         notificationBuilder.setSmallIcon(resID)
     } else {

@@ -72,6 +72,8 @@ class ConnectycubeFlutterCallKit {
     @required int callType,
     @required int callerId,
     @required String callerName,
+    @required String channelId,
+    @required String channelName,
     @required Set<int> opponentsIds,
     @required Map<String, String> userInfo,
   }) async {
@@ -82,6 +84,8 @@ class ConnectycubeFlutterCallKit {
       'call_type': callType,
       'caller_id': callerId,
       'caller_name': callerName,
+      'channelId': channelId,
+      'channelName': channelName,
       'call_opponents': opponentsIds.join(','),
       'user_info': userInfo != null ? jsonEncode(userInfo) : jsonEncode(Map()),
     });

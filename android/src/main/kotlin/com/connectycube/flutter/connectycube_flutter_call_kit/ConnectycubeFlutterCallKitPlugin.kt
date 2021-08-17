@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.WindowManager
 import androidx.annotation.Keep
 import androidx.annotation.NonNull
@@ -60,6 +61,13 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
                         return
                     }
 
+                    val channelId = arguments["channelId"] as String?
+                    val channelName = arguments["channelName"] as String?
+
+                    if(channelId == null || channelName == null){
+                        result.error("ERROR", "channelId and channelName are required", "")
+                        return;
+                    }
                     val callType = arguments["call_type"] as Int
                     val callInitiatorId = arguments["caller_id"] as Int
                     val callInitiatorName = arguments["caller_name"] as String
@@ -67,7 +75,8 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
                         .split(',')
                         .map { it.toInt() })
                     val userInfo = arguments["user_info"] as String
-
+                    Log.i("GM edit", "channelId: $channelId");
+                    Log.i("GM edit", "channelName: $channelName");
                     showCallNotification(
                         applicationContext!!,
                         callId,
@@ -75,7 +84,7 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
                         callInitiatorId,
                         callInitiatorName,
                         callOpponents,
-                        userInfo
+                        userInfo, channelId, channelName
                     )
 
                     saveCallState(callId, CALL_STATE_PENDING)
