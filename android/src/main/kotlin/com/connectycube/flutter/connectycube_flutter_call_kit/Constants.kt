@@ -4,6 +4,8 @@ const val EXTRA_CALL_ID = "extra_call_id"
 const val EXTRA_CALL_TYPE = "extra_call_type"
 const val EXTRA_CALL_INITIATOR_ID = "extra_call_initiator_id"
 const val EXTRA_CALL_INITIATOR_NAME = "extra_call_initiator_name"
+const val EXTRA_TITLE = "extra_title"
+const val EXTRA_DESC = "extra_desc"
 const val EXTRA_CALL_OPPONENTS = "extra_call_opponents"
 const val EXTRA_CALL_USER_INFO = "extra_call_user_info"
 

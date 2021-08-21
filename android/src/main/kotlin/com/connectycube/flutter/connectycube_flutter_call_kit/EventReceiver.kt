@@ -18,6 +18,7 @@ class EventReceiver : BroadcastReceiver() {
 
         when (intent.action) {
             ACTION_CALL_REJECT -> {
+                stopNotificationSound(context);
                 val extras = intent.extras
                 val callId = extras?.getString(EXTRA_CALL_ID)
                 val callType = extras?.getInt(EXTRA_CALL_TYPE)
@@ -44,6 +45,7 @@ class EventReceiver : BroadcastReceiver() {
             }
 
             ACTION_CALL_ACCEPT -> {
+                stopNotificationSound(context);
                 val extras = intent.extras
                 val callId = extras?.getString(EXTRA_CALL_ID)
                 val callType = extras?.getInt(EXTRA_CALL_TYPE)
@@ -70,6 +72,7 @@ class EventReceiver : BroadcastReceiver() {
             }
 
             ACTION_CALL_NOTIFICATION_CANCELED -> {
+                stopNotificationSound(context);
                 val extras = intent.extras
                 val callId = extras?.getString(EXTRA_CALL_ID)
                 val callType = extras?.getInt(EXTRA_CALL_TYPE)
@@ -89,5 +92,11 @@ class EventReceiver : BroadcastReceiver() {
                     )
             }
         }
+    }
+
+    private fun stopNotificationSound(context:Context){
+        val intent = Intent(context, NotificationSoundService::class.java)
+        intent.action = NotificationSoundService.ACTION_STOP_PLAYBACK;
+        context.startService(intent)
     }
 }

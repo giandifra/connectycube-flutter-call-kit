@@ -18,7 +18,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 fun createStartIncomingScreenIntent(
     context: Context, callId: String, callType: Int, callInitiatorId: Int,
-    callInitiatorName: String, opponents: ArrayList<Int>, userInfo: String
+    callInitiatorName: String, title: String,desc: String,opponents: ArrayList<Int>, userInfo: String
 ): Intent {
     val intent = Intent(context, IncomingCallActivity::class.java)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -26,6 +26,8 @@ fun createStartIncomingScreenIntent(
     intent.putExtra(EXTRA_CALL_TYPE, callType)
     intent.putExtra(EXTRA_CALL_INITIATOR_ID, callInitiatorId)
     intent.putExtra(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
+    intent.putExtra(EXTRA_TITLE, title)
+    intent.putExtra(EXTRA_DESC, desc)
     intent.putIntegerArrayListExtra(EXTRA_CALL_OPPONENTS, opponents)
     intent.putExtra(EXTRA_CALL_USER_INFO, userInfo)
     return intent
@@ -39,6 +41,8 @@ class IncomingCallActivity : Activity() {
     private var callType = -1
     private var callInitiatorId = -1
     private var callInitiatorName: String? = null
+    private var title: String? = null
+    private var desc: String? = null
     private var callOpponents: ArrayList<Int>? = ArrayList()
     private var callUserInfo: String? = null
 
@@ -114,6 +118,9 @@ class IncomingCallActivity : Activity() {
         callType = intent.getIntExtra(EXTRA_CALL_TYPE, -1)
         callInitiatorId = intent.getIntExtra(EXTRA_CALL_INITIATOR_ID, -1)
         callInitiatorName = intent.getStringExtra(EXTRA_CALL_INITIATOR_NAME)
+        title = intent.getStringExtra(EXTRA_TITLE)
+        desc = intent.getStringExtra(EXTRA_DESC)
+        callInitiatorName = intent.getStringExtra(EXTRA_CALL_INITIATOR_NAME)
         callOpponents = intent.getIntegerArrayListExtra(EXTRA_CALL_OPPONENTS)
         callUserInfo = intent.getStringExtra(EXTRA_CALL_USER_INFO)
     }
@@ -123,14 +130,22 @@ class IncomingCallActivity : Activity() {
             findViewById(resources.getIdentifier("user_name_txt", "id", packageName))
         callTitleTxt.text = callInitiatorName
 
-        val callSubTitleTxt: TextView =
-            findViewById(resources.getIdentifier("call_type_txt", "id", packageName))
-        callSubTitleTxt.text =
-            String.format(CALL_TYPE_PLACEHOLDER, if (callType == 1) "Video" else "Audio")
+        val titleText: TextView =
+            findViewById(resources.getIdentifier("title_txt", "id", packageName))
+        titleText.text = title
+
+        val descText: TextView =
+                findViewById(resources.getIdentifier("desc_txt", "id", packageName))
+        descText.text = desc
+
+//        val openAppButton: TextView =
+//                findViewById(resources.getIdentifier("open_app", "id", packageName))
+//        openAppButton.text = "Visualizza"
     }
 
     // calls from layout file
     fun onEndCall(view: View?) {
+        stopNotificationSound()
         val bundle = Bundle()
         bundle.putString(EXTRA_CALL_ID, callId)
         bundle.putInt(EXTRA_CALL_TYPE, callType)
@@ -145,8 +160,15 @@ class IncomingCallActivity : Activity() {
         applicationContext.sendBroadcast(endCallIntent)
     }
 
+    private fun stopNotificationSound(){
+        val intent = Intent(this, NotificationSoundService::class.java)
+        intent.action = NotificationSoundService.ACTION_STOP_PLAYBACK;
+        startService(intent)
+    }
+
     // calls from layout file
     fun onStartCall(view: View?) {
+        stopNotificationSound()
         val bundle = Bundle()
         bundle.putString(EXTRA_CALL_ID, callId)
         bundle.putInt(EXTRA_CALL_TYPE, callType)
@@ -161,3 +183,4 @@ class IncomingCallActivity : Activity() {
         applicationContext.sendBroadcast(startCallIntent)
     }
 }
+
