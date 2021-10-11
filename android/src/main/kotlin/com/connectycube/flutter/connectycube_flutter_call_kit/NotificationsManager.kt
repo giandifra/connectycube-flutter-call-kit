@@ -24,8 +24,19 @@ fun cancelCallNotification(context: Context, callId: String) {
 }
 
 fun showCallNotification(
-        context: Context, callId: String, callType: Int, callInitiatorId: Int,
-        callInitiatorName: String, title: String, desc: String, minimalDesc:String, callOpponents: ArrayList<Int>, userInfo: String, channelId: String, channelName: String
+        context: Context,
+        callId: String,
+        callType: Int,
+        callInitiatorId: Int,
+        callInitiatorName: String,
+        title: String,
+        desc: String,
+        minimalDesc:String,
+        callOpponents: ArrayList<Int>,
+        userInfo: String,
+        channelId: String,
+        channelName: String,
+        destinationRoute: String?
 ) {
     Log.i("GM edit", "showCallNotification");
     val notificationManager = NotificationManagerCompat.from(context)
@@ -68,7 +79,8 @@ fun showCallNotification(
             callInitiatorId,
             callInitiatorName,
             callOpponents,
-            userInfo
+            userInfo,
+            destinationRoute
     )
 
     // Add full screen intent (to show on lock screen)
@@ -82,7 +94,8 @@ fun showCallNotification(
             title,
             desc,
             callOpponents,
-            userInfo
+            userInfo,
+            destinationRoute
     )
 
     // Add action when delete call notification
@@ -198,7 +211,8 @@ fun addCallAcceptAction(
         callInitiatorId: Int,
         callInitiatorName: String,
         opponents: ArrayList<Int>,
-        userInfo: String
+        userInfo: String,
+        destinationRoute: String?
 ) {
     val bundle = Bundle()
     bundle.putString(EXTRA_CALL_ID, callId)
@@ -207,7 +221,8 @@ fun addCallAcceptAction(
     bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
     bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, opponents)
     bundle.putString(EXTRA_CALL_USER_INFO, userInfo)
-
+    bundle.putString(EXTRA_DESTINATION_ROUTE, destinationRoute)
+    Log.i("addCallAcceptAction",destinationRoute);
     val acceptPendingIntent: PendingIntent = PendingIntent.getBroadcast(
             context,
             callId.hashCode(),
@@ -242,7 +257,8 @@ fun addCallFullScreenIntent(
         title: String,
         desc: String,
         callOpponents: ArrayList<Int>,
-        userInfo: String
+        userInfo: String,
+        destinationRoute: String?
 ) {
     val callFullScreenIntent: Intent = createStartIncomingScreenIntent(
             context,
@@ -252,7 +268,8 @@ fun addCallFullScreenIntent(
             callInitiatorName,
             title, desc,
             callOpponents,
-            userInfo
+            userInfo,
+            destinationRoute
     )
     val fullScreenPendingIntent = PendingIntent.getActivity(
             context,

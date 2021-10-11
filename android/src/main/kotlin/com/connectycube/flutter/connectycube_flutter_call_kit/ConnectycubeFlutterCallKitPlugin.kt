@@ -28,7 +28,7 @@ import io.flutter.plugin.common.PluginRegistry
 /** ConnectycubeFlutterCallKitPlugin */
 @Keep
 class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
-    PluginRegistry.NewIntentListener, ActivityAware, BroadcastReceiver() {
+        PluginRegistry.NewIntentListener, ActivityAware, BroadcastReceiver() {
     private var applicationContext: Context? = null
     private var mainActivity: Activity? = null
     private lateinit var channel: MethodChannel
@@ -36,8 +36,8 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         onAttachedToEngine(
-            flutterPluginBinding.applicationContext,
-            flutterPluginBinding.binaryMessenger
+                flutterPluginBinding.applicationContext,
+                flutterPluginBinding.binaryMessenger
         )
         registerCallStateReceiver()
     }
@@ -53,7 +53,7 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
             "showCallNotification" -> {
                 try {
                     @Suppress("UNCHECKED_CAST") val arguments: Map<String, Any> =
-                        call.arguments as Map<String, Any>
+                            call.arguments as Map<String, Any>
                     val callId = arguments["session_id"] as String
 
                     if (CALL_STATE_UNKNOWN != getCallState(callId)) {
@@ -63,8 +63,10 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
 
                     val channelId = arguments["channelId"] as String?
                     val channelName = arguments["channelName"] as String?
+                    val destinationRoute = arguments["destinationRoute"] as String?
+                    Log.i("destinationRoute", destinationRoute ?: "null");
 
-                    if(channelId == null || channelName == null){
+                    if (channelId == null || channelName == null) {
                         result.error("ERROR", "channelId and channelName are required", "")
                         return;
                     }
@@ -75,22 +77,25 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
                     val desc = arguments["desc"] as String
                     val minimalDesc = arguments["minimalDesc"] as String
                     val callOpponents = ArrayList((arguments["call_opponents"] as String)
-                        .split(',')
-                        .map { it.toInt() })
+                            .split(',')
+                            .map { it.toInt() })
                     val userInfo = arguments["user_info"] as String
                     Log.i("GM edit", "channelId: $channelId");
                     Log.i("GM edit", "channelName: $channelName");
                     showCallNotification(
-                        applicationContext!!,
-                        callId,
-                        callType,
-                        callInitiatorId,
-                        callInitiatorName,
+                            applicationContext!!,
+                            callId,
+                            callType,
+                            callInitiatorId,
+                            callInitiatorName,
                             title,
                             desc,
                             minimalDesc,
-                        callOpponents,
-                        userInfo, channelId, channelName
+                            callOpponents,
+                            userInfo,
+                            channelId,
+                            channelName,
+                            destinationRoute
                     )
 
                     saveCallState(callId, CALL_STATE_PENDING)
@@ -106,7 +111,7 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
             "reportCallAccepted" -> {
                 try {
                     @Suppress("UNCHECKED_CAST") val arguments: Map<String, Any> =
-                        call.arguments as Map<String, Any>
+                            call.arguments as Map<String, Any>
                     val callId = arguments["session_id"] as String
                     cancelCallNotification(applicationContext!!, callId)
 
@@ -121,7 +126,7 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
             "reportCallEnded" -> {
                 try {
                     @Suppress("UNCHECKED_CAST") val arguments: Map<String, Any> =
-                        call.arguments as Map<String, Any>
+                            call.arguments as Map<String, Any>
                     val callId = arguments["session_id"] as String
 
                     processCallEnded(callId)
@@ -136,7 +141,7 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
             "getCallState" -> {
                 try {
                     @Suppress("UNCHECKED_CAST") val arguments: Map<String, Any> =
-                        call.arguments as Map<String, Any>
+                            call.arguments as Map<String, Any>
                     val callId = arguments["session_id"] as String
 
                     result.success(getCallState(callId))
@@ -148,7 +153,7 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
             "setCallState" -> {
                 try {
                     @Suppress("UNCHECKED_CAST") val arguments: Map<String, Any> =
-                        call.arguments as Map<String, Any>
+                            call.arguments as Map<String, Any>
                     val callId = arguments["session_id"] as String
                     val callState = arguments["call_state"] as String
 
@@ -163,7 +168,7 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
             "getCallData" -> {
                 try {
                     @Suppress("UNCHECKED_CAST") val arguments: Map<String, Any> =
-                        call.arguments as Map<String, Any>
+                            call.arguments as Map<String, Any>
                     val callId = arguments["session_id"] as String
 
                     result.success(getCallData(callId))
@@ -175,7 +180,7 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
             "setOnLockScreenVisibility" -> {
                 try {
                     @Suppress("UNCHECKED_CAST") val arguments: Map<String, Any> =
-                        call.arguments as Map<String, Any>
+                            call.arguments as Map<String, Any>
                     val isVisible = arguments["is_visible"] as Boolean
 
                     setOnLockScreenVisibility(isVisible)
@@ -188,7 +193,7 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
             "clearCallData" -> {
                 try {
                     @Suppress("UNCHECKED_CAST") val arguments: Map<String, Any> =
-                        call.arguments as Map<String, Any>
+                            call.arguments as Map<String, Any>
                     val callId = arguments["session_id"] as String
 
                     clearCallData(callId)
@@ -266,7 +271,7 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
         parameters["caller_id"] = intent.getIntExtra(EXTRA_CALL_INITIATOR_ID, -1)
         parameters["caller_name"] = intent.getStringExtra(EXTRA_CALL_INITIATOR_NAME)
         parameters["call_opponents"] =
-            intent.getIntegerArrayListExtra(EXTRA_CALL_OPPONENTS)?.joinToString(separator = ",")
+                intent.getIntegerArrayListExtra(EXTRA_CALL_OPPONENTS)?.joinToString(separator = ",")
         parameters["user_info"] = intent.getStringExtra(EXTRA_CALL_USER_INFO)
 
         when (action) {
@@ -281,6 +286,13 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
                 channel.invokeMethod("onCallAccepted", parameters)
 
                 val launchIntent = getLaunchIntent(context!!)
+
+                val destinationRoute = intent.getStringExtra(EXTRA_DESTINATION_ROUTE);
+                Log.i("onReceive", destinationRoute ?: "null");
+                if (destinationRoute != null) {
+                    launchIntent?.putExtra("route", destinationRoute);
+                }
+
                 launchIntent?.action = ACTION_CALL_ACCEPT
                 context.startActivity(launchIntent)
             }

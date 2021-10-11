@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
@@ -17,9 +18,18 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 
 fun createStartIncomingScreenIntent(
-    context: Context, callId: String, callType: Int, callInitiatorId: Int,
-    callInitiatorName: String, title: String,desc: String,opponents: ArrayList<Int>, userInfo: String
+    context: Context,
+    callId: String,
+    callType: Int,
+    callInitiatorId: Int,
+    callInitiatorName: String,
+    title: String,
+    desc: String,
+    opponents: ArrayList<Int>,
+    userInfo: String,
+    destinationRoute: String?
 ): Intent {
+    Log.i("createStartIncoming",destinationRoute);
     val intent = Intent(context, IncomingCallActivity::class.java)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
     intent.putExtra(EXTRA_CALL_ID, callId)
@@ -30,6 +40,7 @@ fun createStartIncomingScreenIntent(
     intent.putExtra(EXTRA_DESC, desc)
     intent.putIntegerArrayListExtra(EXTRA_CALL_OPPONENTS, opponents)
     intent.putExtra(EXTRA_CALL_USER_INFO, userInfo)
+    intent.putExtra(EXTRA_DESTINATION_ROUTE, destinationRoute)
     return intent
 }
 
@@ -42,6 +53,7 @@ class IncomingCallActivity : Activity() {
     private var callInitiatorId = -1
     private var callInitiatorName: String? = null
     private var title: String? = null
+    private var destinationRoute: String? = null
     private var desc: String? = null
     private var callOpponents: ArrayList<Int>? = ArrayList()
     private var callUserInfo: String? = null
@@ -123,6 +135,7 @@ class IncomingCallActivity : Activity() {
         callInitiatorName = intent.getStringExtra(EXTRA_CALL_INITIATOR_NAME)
         callOpponents = intent.getIntegerArrayListExtra(EXTRA_CALL_OPPONENTS)
         callUserInfo = intent.getStringExtra(EXTRA_CALL_USER_INFO)
+        destinationRoute = intent.getStringExtra(EXTRA_DESTINATION_ROUTE)
     }
 
     private fun initUi() {
@@ -153,6 +166,7 @@ class IncomingCallActivity : Activity() {
         bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
         bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, callOpponents)
         bundle.putString(EXTRA_CALL_USER_INFO, callUserInfo)
+        bundle.putString(EXTRA_DESTINATION_ROUTE, destinationRoute)
 
         val endCallIntent = Intent(this, EventReceiver::class.java)
         endCallIntent.action = ACTION_CALL_REJECT
@@ -176,6 +190,7 @@ class IncomingCallActivity : Activity() {
         bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
         bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, callOpponents)
         bundle.putString(EXTRA_CALL_USER_INFO, callUserInfo)
+        bundle.putString(EXTRA_DESTINATION_ROUTE, destinationRoute)
 
         val startCallIntent = Intent(this, EventReceiver::class.java)
         startCallIntent.action = ACTION_CALL_ACCEPT

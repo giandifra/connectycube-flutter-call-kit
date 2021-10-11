@@ -78,6 +78,7 @@ class ConnectycubeFlutterCallKit {
     @required String minimalDesc,
     @required String channelId,
     @required String channelName,
+    @required String destinationRoute,
     @required Set<int> opponentsIds,
     @required Map<String, String> userInfo,
   }) async {
@@ -96,6 +97,7 @@ class ConnectycubeFlutterCallKit {
       'channelName': channelName,
       'call_opponents': opponentsIds.join(','),
       'user_info': userInfo != null ? jsonEncode(userInfo) : jsonEncode(Map()),
+      'destinationRoute':destinationRoute
     });
   }
 
