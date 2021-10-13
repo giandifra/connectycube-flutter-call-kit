@@ -14,9 +14,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.connectycube.flutter.connectycube_flutter_call_kit.NotificationSoundService.EXTRA_SOUND_URI
 import com.connectycube.flutter.connectycube_flutter_call_kit.utils.getColorizedText
-
+import java.util.*
 
 fun cancelCallNotification(context: Context, callId: String) {
     val notificationManager = NotificationManagerCompat.from(context)
@@ -31,7 +30,7 @@ fun showCallNotification(
         callInitiatorName: String,
         title: String,
         desc: String,
-        minimalDesc:String,
+        minimalDesc: String,
         callOpponents: ArrayList<Int>,
         userInfo: String,
         channelId: String,
@@ -57,7 +56,7 @@ fun showCallNotification(
 
 
     val builder: NotificationCompat.Builder =
-        createCallNotification(context, channelId, callInitiatorName, minimalDesc, pendingIntent, ringtone)
+            createCallNotification(context, channelId, callInitiatorName, minimalDesc, pendingIntent, ringtone)
 
     // Add actions
     addCallRejectAction(
@@ -122,7 +121,7 @@ fun showCallNotification(
     notificationManager.notify(callId.hashCode(), builder.build())
 }
 
-fun startSoundService(context: Context){
+fun startSoundService(context: Context) {
     val soundIntent = Intent(context, NotificationSoundService::class.java)
     soundIntent.action = NotificationSoundService.ACTION_START_PLAYBACK
     val resId = context.resources.getIdentifier("xylophone", "raw", context.packageName)
@@ -148,17 +147,17 @@ fun createCallNotification(
 ): NotificationCompat.Builder {
     val notificationBuilder = NotificationCompat.Builder(context, channelId)
     notificationBuilder
-        .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
-        .setContentTitle(title)
-        .setContentText(text)
-        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-        .setAutoCancel(true)
-        .setOngoing(true)
-        .setCategory(NotificationCompat.CATEGORY_CALL)
-        .setContentIntent(pendingIntent)
-        .setSound(null)
-        .setPriority(NotificationCompat.PRIORITY_MAX)
-        .setTimeoutAfter(60000)
+            //.setDefaults(NotificationCompat.DEFAULT_VIBRATE)
+            .setContentTitle(title)
+            .setContentText(text)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setAutoCancel(true)
+            .setOngoing(true)
+            .setCategory(NotificationCompat.CATEGORY_CALL)
+            .setContentIntent(pendingIntent)
+            .setSound(null)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setTimeoutAfter(60000)
     return notificationBuilder
 }
 
@@ -198,7 +197,7 @@ fun addCallRejectAction(
             getColorizedText(getStringFromResource(context, "close_notification"), "#E02B00"),
             declinePendingIntent
     )
-        .build()
+            .build()
 
     notificationBuilder.addAction(declineAction)
 }
@@ -222,7 +221,7 @@ fun addCallAcceptAction(
     bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, opponents)
     bundle.putString(EXTRA_CALL_USER_INFO, userInfo)
     bundle.putString(EXTRA_DESTINATION_ROUTE, destinationRoute)
-    Log.i("addCallAcceptAction",destinationRoute);
+    Log.i("addCallAcceptAction", destinationRoute);
     val acceptPendingIntent: PendingIntent = PendingIntent.getBroadcast(
             context,
             callId.hashCode(),
@@ -237,11 +236,11 @@ fun addCallAcceptAction(
             getColorizedText(getStringFromResource(context, "open_app"), "#4CAF50"),
             acceptPendingIntent
     )
-        .build()
+            .build()
     notificationBuilder.addAction(acceptAction)
 }
 
-fun getStringFromResource(context: Context, key: String):String{
+fun getStringFromResource(context: Context, key: String): String {
     val resId = context.resources.getIdentifier(key, "string", context.packageName)
     val text = context.resources.getString(resId)
     return text;
@@ -313,19 +312,14 @@ fun createCallNotificationChannel(notificationManager: NotificationManagerCompat
                 channelName,
                 NotificationManager.IMPORTANCE_HIGH
         )
-//        channel.setSound(
-//                sound, AudioAttributes.Builder()
-//                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-//                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-//                .build()
-//        )
+        channel.setSound(null,null)
         notificationManager.createNotificationChannel(channel)
     }
 }
 
 fun setNotificationSmallIcon(context: Context, notificationBuilder: NotificationCompat.Builder) {
     val resID =
-        context.resources.getIdentifier("chivado_notification", "drawable", context.packageName)
+            context.resources.getIdentifier("chivado_notification", "drawable", context.packageName)
     if (resID != 0) {
         notificationBuilder.setSmallIcon(resID)
     } else {
