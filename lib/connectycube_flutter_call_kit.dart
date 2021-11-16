@@ -11,7 +11,7 @@ typedef Future<dynamic> CallEventHandler(
   int callerId,
   String callerName,
   Set<int> opponentsIds,
-  Map<String, String> userInfo,
+  Map<String, String>? userInfo,
 );
 
 class ConnectycubeFlutterCallKit {
