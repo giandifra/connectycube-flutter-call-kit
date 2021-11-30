@@ -287,10 +287,10 @@ class ConnectycubeFlutterCallKitPlugin : FlutterPlugin, MethodCallHandler,
 
                 val launchIntent = getLaunchIntent(context!!)
 
-                val destinationRoute = intent.getStringExtra(EXTRA_DESTINATION_ROUTE);
-                Log.i("onReceive", destinationRoute ?: "null");
-                if (destinationRoute != null) {
-                    launchIntent?.putExtra("route", destinationRoute);
+                val notificationType = intent.getStringExtra(EXTRA_NOTIFICATION_TYPE);
+                Log.i("ConnectyCubeFlutter", "$EXTRA_NOTIFICATION_TYPE: $notificationType");
+                if (notificationType != null) {
+                    launchIntent?.putExtra(EXTRA_NOTIFICATION_TYPE, notificationType);
                 }
 
                 launchIntent?.action = ACTION_CALL_ACCEPT

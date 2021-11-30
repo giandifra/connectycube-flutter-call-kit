@@ -8,7 +8,7 @@ const val EXTRA_TITLE = "extra_title"
 const val EXTRA_DESC = "extra_desc"
 const val EXTRA_CALL_OPPONENTS = "extra_call_opponents"
 const val EXTRA_CALL_USER_INFO = "extra_call_user_info"
-const val EXTRA_DESTINATION_ROUTE = "destination_route"
+const val EXTRA_NOTIFICATION_TYPE = "notification_type"
 
 const val ACTION_CALL_ACCEPT = "action_call_accept"
 const val ACTION_CALL_REJECT = "action_call_reject"

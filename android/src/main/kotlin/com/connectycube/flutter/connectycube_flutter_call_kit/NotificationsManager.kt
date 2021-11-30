@@ -220,7 +220,7 @@ fun addCallAcceptAction(
     bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
     bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, opponents)
     bundle.putString(EXTRA_CALL_USER_INFO, userInfo)
-    bundle.putString(EXTRA_DESTINATION_ROUTE, destinationRoute)
+    bundle.putString(EXTRA_NOTIFICATION_TYPE, destinationRoute)
     Log.i("addCallAcceptAction", destinationRoute);
     val acceptPendingIntent: PendingIntent = PendingIntent.getBroadcast(
             context,

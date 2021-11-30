@@ -40,7 +40,7 @@ fun createStartIncomingScreenIntent(
     intent.putExtra(EXTRA_DESC, desc)
     intent.putIntegerArrayListExtra(EXTRA_CALL_OPPONENTS, opponents)
     intent.putExtra(EXTRA_CALL_USER_INFO, userInfo)
-    intent.putExtra(EXTRA_DESTINATION_ROUTE, destinationRoute)
+    intent.putExtra(EXTRA_NOTIFICATION_TYPE, destinationRoute)
     return intent
 }
 
@@ -135,7 +135,7 @@ class IncomingCallActivity : Activity() {
         callInitiatorName = intent.getStringExtra(EXTRA_CALL_INITIATOR_NAME)
         callOpponents = intent.getIntegerArrayListExtra(EXTRA_CALL_OPPONENTS)
         callUserInfo = intent.getStringExtra(EXTRA_CALL_USER_INFO)
-        destinationRoute = intent.getStringExtra(EXTRA_DESTINATION_ROUTE)
+        destinationRoute = intent.getStringExtra(EXTRA_NOTIFICATION_TYPE)
     }
 
     private fun initUi() {
@@ -166,7 +166,7 @@ class IncomingCallActivity : Activity() {
         bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
         bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, callOpponents)
         bundle.putString(EXTRA_CALL_USER_INFO, callUserInfo)
-        bundle.putString(EXTRA_DESTINATION_ROUTE, destinationRoute)
+        bundle.putString(EXTRA_NOTIFICATION_TYPE, destinationRoute)
 
         val endCallIntent = Intent(this, EventReceiver::class.java)
         endCallIntent.action = ACTION_CALL_REJECT
@@ -190,7 +190,7 @@ class IncomingCallActivity : Activity() {
         bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
         bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, callOpponents)
         bundle.putString(EXTRA_CALL_USER_INFO, callUserInfo)
-        bundle.putString(EXTRA_DESTINATION_ROUTE, destinationRoute)
+        bundle.putString(EXTRA_NOTIFICATION_TYPE, destinationRoute)
 
         val startCallIntent = Intent(this, EventReceiver::class.java)
         startCallIntent.action = ACTION_CALL_ACCEPT

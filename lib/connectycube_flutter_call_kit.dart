@@ -75,7 +75,7 @@ class ConnectycubeFlutterCallKit {
     required String minimalDesc,
     required String channelId,
     required String channelName,
-    required String destinationRoute,
+    required String? destinationRoute,
     required Set<int> opponentsIds,
     required Map<String, String> userInfo,
   }) async {

@@ -53,7 +53,7 @@ class EventReceiver : BroadcastReceiver() {
                 val callInitiatorName = extras?.getString(EXTRA_CALL_INITIATOR_NAME)
                 val callOpponents = extras?.getIntegerArrayList(EXTRA_CALL_OPPONENTS)
                 val userInfo = extras?.getString(EXTRA_CALL_USER_INFO)
-                val destinationRoute = extras?.getString(EXTRA_DESTINATION_ROUTE)
+                val destinationRoute = extras?.getString(EXTRA_NOTIFICATION_TYPE)
                 Log.i(TAG, "NotificationReceiver onReceive Call ACCEPT, callId: $callId")
                 Log.i(TAG, "NotificationReceiver onReceive Call ACCEPT, destination route: $destinationRoute")
 
@@ -65,7 +65,7 @@ class EventReceiver : BroadcastReceiver() {
                 bundle.putString(EXTRA_CALL_INITIATOR_NAME, callInitiatorName)
                 bundle.putIntegerArrayList(EXTRA_CALL_OPPONENTS, callOpponents)
                 bundle.putString(EXTRA_CALL_USER_INFO, userInfo)
-                bundle.putString(EXTRA_DESTINATION_ROUTE, destinationRoute)
+                bundle.putString(EXTRA_NOTIFICATION_TYPE, destinationRoute)
                 broadcastIntent.putExtras(bundle)
 
                 LocalBroadcastManager.getInstance(context.applicationContext)
