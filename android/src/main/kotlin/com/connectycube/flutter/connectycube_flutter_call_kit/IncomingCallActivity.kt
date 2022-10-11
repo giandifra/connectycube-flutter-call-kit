@@ -27,9 +27,9 @@ fun createStartIncomingScreenIntent(
     desc: String,
     opponents: ArrayList<Int>,
     userInfo: String,
-    destinationRoute: String?
+    destinationRoute: String
 ): Intent {
-    Log.i("createStartIncoming",destinationRoute);
+    Log.i("createStartIncoming", destinationRoute);
     val intent = Intent(context, IncomingCallActivity::class.java)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
     intent.putExtra(EXTRA_CALL_ID, callId)

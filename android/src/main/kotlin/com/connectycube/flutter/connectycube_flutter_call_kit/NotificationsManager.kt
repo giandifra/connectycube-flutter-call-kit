@@ -35,7 +35,7 @@ fun showCallNotification(
         userInfo: String,
         channelId: String,
         channelName: String,
-        destinationRoute: String?
+        destinationRoute: String
 ) {
     Log.i("GM edit", "showCallNotification");
     val notificationManager = NotificationManagerCompat.from(context)
@@ -211,7 +211,7 @@ fun addCallAcceptAction(
         callInitiatorName: String,
         opponents: ArrayList<Int>,
         userInfo: String,
-        destinationRoute: String?
+        destinationRoute: String
 ) {
     val bundle = Bundle()
     bundle.putString(EXTRA_CALL_ID, callId)
@@ -257,7 +257,7 @@ fun addCallFullScreenIntent(
         desc: String,
         callOpponents: ArrayList<Int>,
         userInfo: String,
-        destinationRoute: String?
+        destinationRoute: String
 ) {
     val callFullScreenIntent: Intent = createStartIncomingScreenIntent(
             context,

@@ -23,9 +23,9 @@ class NotificationSoundService : Service() {
             return START_NOT_STICKY
         }
         val action = intent.action
-        Log.i(TAG, action)
+        Log.i(TAG, action ?: "")
         when (action) {
-            ACTION_START_PLAYBACK -> startSound(intent.getStringExtra(EXTRA_SOUND_URI))
+            ACTION_START_PLAYBACK -> intent.getStringExtra(EXTRA_SOUND_URI)?.let { startSound(it) }
             ACTION_STOP_PLAYBACK -> stopSound()
         }
         return START_NOT_STICKY
